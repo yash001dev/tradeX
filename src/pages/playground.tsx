@@ -23,23 +23,8 @@ export const metadata: Metadata = {
 export default function PlaygroundPage() {
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/playground-light.png"
-          width={1280}
-          height={916}
-          alt="Playground"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/playground-dark.png"
-          width={1280}
-          height={916}
-          alt="Playground"
-          className="hidden dark:block"
-        />
-      </div>
-      <div className="hidden h-full flex-col md:flex">
+      
+      <div className=" h-full flex-col md:flex">
         <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
           <h2 className="text-lg font-semibold">TradeX</h2>
           <div className="ml-auto flex w-full space-x-2 sm:justify-end">
@@ -247,13 +232,13 @@ export default function PlaygroundPage() {
                       className="min-h-[400px] flex-1 p-4 md:min-h-[700px] lg:min-h-[700px]"
                     /> */}
                     <RealTimeChart />
-                    <div className="flex items-center space-x-2">
+                    {/* <div className="flex items-center space-x-2">
                       <Button>Submit</Button>
                       <Button variant="secondary">
                         <span className="sr-only">Show history</span>
                         <SunIcon className="h-4 w-4" />
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
                 </TabsContent>
                 <TabsContent value="insert" className="mt-0 border-0 p-0">

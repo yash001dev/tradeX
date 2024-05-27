@@ -83,12 +83,30 @@ const containerHeight = (svg.node()?.parentNode as Element)?.clientHeight ?? 0;
         .y(d => y(d.value))
         .curve(d3.curveMonotoneX);
 
+      // Define the filter
+      g.append('defs')
+        .append('filter')
+        .attr('id', 'glow')
+        .append('feGaussianBlur')
+        .attr('stdDeviation', '8')
+        .attr('result', 'coloredBlur');
+
+      const feMerge = g.select('filter')
+        .append('feMerge');
+
+      feMerge.append('feMergeNode')
+        .attr('in', 'coloredBlur');
+      feMerge.append('feMergeNode')
+        .attr('in', 'SourceGraphic');
+
+      // Apply the filter to the path
       g.selectAll<SVGPathElement, DataType[]>('path').data([data])
         .join(
           enter => enter.append('path')
             .attr('fill', 'none')
             .attr('stroke', 'orange')
             .attr('stroke-width', 1.5)
+            .attr('filter', 'url(#glow)') // Apply the filter
             .attr('d', line),
           update => update.attr('d', line)
         );
@@ -101,6 +119,39 @@ const containerHeight = (svg.node()?.parentNode as Element)?.clientHeight ?? 0;
         .attr('color', 'grey');
 
       const lastValue = data[data.length - 1].value;
+
+      // Define the gradient
+const defs = g.append('defs');
+
+const gradient = defs.append('linearGradient')
+  .attr('id', 'gradient')
+  .attr('x1', '0%')
+  .attr('y1', '0%')
+  .attr('x2', '0%')
+  .attr('y2', '100%');
+
+gradient.append('stop')
+  .attr('offset', '0%')
+  .attr('style', 'stop-color:green;stop-opacity:0.3');
+
+gradient.append('stop')
+  .attr('offset', '100%')
+  .attr('style', 'stop-color:green;stop-opacity:0');
+
+  // Create the rectangle
+let rect2 = g.selectAll<SVGRectElement, unknown>('.gradient-rect').data([null]);
+
+rect2 = rect2.enter().append('rect')
+  .attr('class', 'gradient-rect')
+  .attr('x', 0)
+  .attr('y', 0)
+  .attr('width', width)
+  .attr('fill', 'url(#gradient)')
+  .merge(rect2);
+
+// Update the height of the rectangle when the baseline changes
+    rect2.attr('height', y(lastValue));
+      
       g.selectAll<SVGLineElement, unknown>('.baseline').data([null])
         .join('line')
         .attr('class', 'baseline')
@@ -108,8 +159,8 @@ const containerHeight = (svg.node()?.parentNode as Element)?.clientHeight ?? 0;
         .attr('x2', width)
         .attr('y1', y(lastValue))
         .attr('y2', y(lastValue))
-        .attr('stroke', 'green')
-        .attr('stroke-width', 1);
+        .attr('stroke', 'darkgreen')
+        .attr('stroke-width', 2);
 
       g.selectAll<SVGGElement, unknown>('.y-axis').data([null])
         .join('g')
@@ -117,11 +168,52 @@ const containerHeight = (svg.node()?.parentNode as Element)?.clientHeight ?? 0;
         .attr('transform', `translate(${width},0)`)
         .call(d3.axisRight(y))
         .attr('color', 'grey');
+
+      
+      
+  // Inside the second useEffect hook
+const yAxis = g.selectAll<SVGGElement, unknown>('.y-axis').data([null])
+  .join('g')
+  .attr('class', 'y-axis')
+  .attr('transform', `translate(${width},0)`)
+  .call(d3.axisRight(y))
+  .attr('color', 'grey');
+
+// Append the rectangle if it doesn't exist
+let rect = yAxis.selectAll<SVGRectElement, unknown>('.y-axis-label-rect').data([null]);
+rect = rect.enter().append('rect')
+  .attr('class', 'y-axis-label-rect')
+  .attr('x', -25)
+  .attr('height', '20px')
+  .attr('width', '50px')
+  .attr('fill', 'orange')
+  .attr('stroke', 'black') // Set the border color to black
+  .attr('stroke-width', '0.5px') // Increase the border width
+   .attr('rx', '5px') // Set the x-axis radius of the ellipse used to round off the corners of the rectangle
+  .attr('ry', '5px') // Set the y-axis radius of the ellipse used to round off the corners of the rectangle
+  .merge(rect);
+
+// Append the label if it doesn't exist
+let label = yAxis.selectAll<SVGTextElement, unknown>('.y-axis-label').data([null]);
+label = label.enter().append('text')
+  .attr('class', 'y-axis-label')
+  .attr('dy', '0.40em')
+  .attr('fill', 'black') // Set the text color to black
+  .attr('text-anchor', 'middle') // Center the text
+  .attr('font-size', '10px') // Increase the font size
+  .merge(label);
+
+// Update the y attribute and text of the rectangle and label
+rect.attr('y', d => y(data[data.length - 1].value) - 10); // Adjust the y attribute
+label.attr('y', d => y(data[data.length - 1].value)) // Adjust the y attribute
+  .attr('x', -25 + 25) // Center the text in the rectangle
+  .text(data[data.length - 1].value.toFixed(2)); // Update the text
     }
   }, [data]);
+  
 
   return (
-    <div className="w-full h-96 md:h-[500px] lg:h-[600px]">
+    <div className="w-full h-screen md:h-[500px] lg:h-[600px]">
       {isLoading ? (
         <div className='w-full h-96 md:h-[500px] lg:h-[600px] flex items-center justify-center'>
           <LoadingSpinner />
