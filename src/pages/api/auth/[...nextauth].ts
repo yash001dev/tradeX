@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import prisma from "../../../../prisma";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.NEXT_GOOGLE_CLIENT_SECRET!;

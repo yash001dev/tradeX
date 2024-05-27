@@ -12,7 +12,7 @@ export default function Home() {
   const router = useRouter();
    useEffect(() => {
     if (status === 'authenticated') {
-      router.push('/dashboard');
+      router.push('/playground');
     } else{
       router.push('/auth/signin');
     }

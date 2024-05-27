@@ -12,6 +12,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { SunIcon } from "lucide-react"
 import RealTimeChart from "@/components/RealTimeChart"
+import { ModelSelector } from "@/components/ui/model-selector"
+import { models, types } from "../../mock/models"
+import { MaxLengthSelector } from "@/components/ui/maxlength-selector"
+import { PresetSelector } from "@/components/ui/preset-selector"
+import { PresetActions } from "@/components/ui/preset-actions"
+import { PresetSave } from "@/components/ui/preset-save"
+import { PresetShare } from "@/components/ui/preset=share"
+import { presets } from "../../mock/presets"
+import { TemperatureSelector } from "@/components/ui/temperature-selector"
+import { TopPSelector } from "@/components/ui/top-p-selector"
 
 
 export const metadata: Metadata = {
@@ -28,13 +38,13 @@ export default function PlaygroundPage() {
         <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
           <h2 className="text-lg font-semibold">TradeX</h2>
           <div className="ml-auto flex w-full space-x-2 sm:justify-end">
-            {/* <PresetSelector presets={presets} />
+            <PresetSelector presets={presets} />
             <PresetSave />
             <div className="hidden space-x-2 md:flex">
               <CodeViewer />
               <PresetShare />
             </div>
-            <PresetActions /> */}
+            <PresetActions />
           </div>
         </div>
         <Separator />
@@ -219,10 +229,10 @@ export default function PlaygroundPage() {
                     </TabsTrigger>
                   </TabsList>
                 </div>
-                {/* <ModelSelector types={types} models={models} />
+                <ModelSelector types={types} models={models} />
                 <TemperatureSelector defaultValue={[0.56]} />
                 <MaxLengthSelector defaultValue={[256]} />
-                <TopPSelector defaultValue={[0.9]} /> */}
+                <TopPSelector defaultValue={[0.9]} />
               </div>
               <div className="md:order-1">
                 <TabsContent value="complete" className="mt-0 border-0 p-0">

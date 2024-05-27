@@ -219,7 +219,9 @@ label.attr('y', d => y(data[data.length - 1].value)) // Adjust the y attribute
           <LoadingSpinner />
         </div>
       ) : (
-        <svg ref={chartRef}></svg>
+        <svg style={{
+          zIndex: 0,
+        }} ref={chartRef}></svg>
       )}
     </div>
   );
