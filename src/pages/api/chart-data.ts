@@ -1,6 +1,7 @@
+import { NextRequest } from "next/server";
 import { Server } from "socket.io";
 
-export default function ioHandler(req, res) {
+export default function ioHandler(req: NextRequest, res: any) {
   if (!res.socket.server.io) {
     const io = new Server(res.socket.server);
 
